@@ -1,20 +1,17 @@
-import React from 'react'
-import { hydrateRoot } from 'react-dom/client'
-import { PageShell } from './PageShell'
-import type { PageContextClient } from './types'
-
 export { render }
 
-async function render(pageContext: PageContextClient) {
-  const { Page, pageProps } = pageContext
+import React from 'react'
+import { hydrateRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { getStore } from '@/redux/store'
+
+async function render(pageContext:any) {
+  const { Page } = pageContext
+  const store = getStore(pageContext.PRELOADED_STATE)
   hydrateRoot(
-    document.getElementById('page-view')!,
-    <PageShell pageContext={pageContext}>
-      <Page {...pageProps} />
-    </PageShell>
+    document.getElementById('react-root')!,
+    <Provider store={store}>
+      <Page />
+    </Provider>
   )
 }
-
-/* To enable Client-side Routing:
-export const clientRouting = true
-// !! WARNING !! Before doing so, read https://vite-plugin-ssr.com/clientRouting */

@@ -1,44 +1,41 @@
-import ReactDOMServer from 'react-dom/server'
-import { PageShell } from './PageShell'
+import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux'
+import { getStore } from '@/redux/store'
 import { escapeInject, dangerouslySkipEscape } from 'vite-plugin-ssr'
-import logoUrl from './logo.svg'
-import type { PageContextServer } from './types'
 
 export { render }
-// See https://vite-plugin-ssr.com/data-fetching
-export const passToClient = ['pageProps', 'urlPathname']
+export { onBeforeRender }
+export { passToClient }
 
-async function render(pageContext: PageContextServer) {
-  const { Page, pageProps } = pageContext
-  const pageHtml = ReactDOMServer.renderToString(
-    <PageShell pageContext={pageContext}>
-      <Page {...pageProps} />
-    </PageShell>
-  )
+const passToClient = ['PRELOADED_STATE']
 
-  // See https://vite-plugin-ssr.com/head
-  const { documentProps } = pageContext.exports
-  const title = (documentProps && documentProps.title) || 'Vite SSR app'
-  const desc = (documentProps && documentProps.description) || 'App using Vite + vite-plugin-ssr'
-
-  const documentHtml = escapeInject`<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" href="${logoUrl}" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="${desc}" />
-        <title>${title}</title>
-      </head>
+async function render(pageContext: any) {
+  const { pageHtml } = pageContext
+  return escapeInject`<!DOCTYPE html>
+    <html>
       <body>
-        <div id="page-view">${dangerouslySkipEscape(pageHtml)}</div>
+        <div id="react-root">${dangerouslySkipEscape(pageHtml)}</div>
       </body>
     </html>`
+}
+
+async function onBeforeRender(pageContext: any) {
+  const store = getStore({})
+
+  const { Page } = pageContext
+  const pageHtml = renderToString(
+    <Provider store={store}>
+      <Page />
+    </Provider>
+  )
+
+  // Grab the initial state from our Redux store
+  const PRELOADED_STATE = store.getState()
 
   return {
-    documentHtml,
     pageContext: {
-      // We can add some `pageContext` here, which is useful if we want to do page redirection https://vite-plugin-ssr.com/page-redirection
+      PRELOADED_STATE,
+      pageHtml
     }
   }
 }
