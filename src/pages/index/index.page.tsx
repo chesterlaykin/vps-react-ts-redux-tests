@@ -1,18 +1,19 @@
-import { Counter } from "./Counter";
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-export { Page };
+export { Page }
 
 function Page() {
+  const count = useSelector((state: any) => state.value)
+  const dispatch = useDispatch()
+
+  const increment = () => dispatch({ type: 'counter/incremented' })
+  const decrement = () => dispatch({ type: 'counter/decremented' })
+
   return (
-    <div>
-      <h1>Welcome</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
-    </div>
-  );
+    <>
+      <h1>Redux-Controlled Counter</h1>
+      Count: {count}. <button onClick={increment}>++</button> <button onClick={decrement}>--</button>
+    </>
+  )
 }

@@ -5,7 +5,8 @@ vps-react-ts-redux-tests
 - [Comments (continuous)](#comments-continuous)
       - [sep 2022](#sep-2022)
 - [Installed dependencies + configurations](#installed-dependencies--configurations)
-  - [**Vite-plugin-ssr**](#vite-plugin-ssr)
+  - [Redux related](#redux-related)
+  - [Included in project template](#included-in-project-template)
     - [Compileroptions configurations](#compileroptions-configurations)
       - [Path alias set in tsconfig + vite.config ( baseUrl + paths )](#path-alias-set-in-tsconfig--viteconfig--baseurl--paths-)
   - [**Typescript**](#typescript)
@@ -15,6 +16,7 @@ vps-react-ts-redux-tests
 
 # vps-react-ts-redux-tests
 
+Using template: Vps-react-ts-template1
 
 # Current status
 
@@ -27,16 +29,16 @@ Working
 
 # Installed dependencies + configurations
 
-## **Vite-plugin-ssr**
+## Redux related
 
-Command used:
-`npm init vite-plugin-ssr@latest`
+- redux
+- react-redux
 
-Version: 
+`yarn add redux react-redux`
 
-CLI install options:
+## Included in project template
 
-- react-ts
+- Vite-plugin-ssr (CLI install options: - react-ts)
 
 ### Compileroptions configurations
 
